@@ -84,6 +84,6 @@ for x in range(len(file_names)):
 	if os.stat(file_names[x]).st_size != 0: #checks if file is empty
 		data = copy.deepcopy(loadFile(file_names[x]))
 		getData(data)
-		break;
+		# break;
 	
-print(final_data)
+pprint.pprint(final_data)
