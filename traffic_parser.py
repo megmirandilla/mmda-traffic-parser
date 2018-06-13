@@ -33,6 +33,14 @@ def loadFile(file):
 		file_data = json.load(j)
 	return file_data
 
+def checkStatus(status):
+	if status == "light":
+		return 25
+	elif status == "mod":
+		return 50
+	elif status == "heavy":
+		return 75
+
 def getData(data):
 	temp_data = []
 	i = 0
@@ -41,29 +49,18 @@ def getData(data):
 			
 			if direction == "1":
 				temp_data = ["date",data[i]["northbound"]["time_updated"]]
-				if data[i]["northbound"]["status"] == "light":
-					temp_data.append(25)
-				elif data[i]["northbound"]["status"] == "mod":
-					temp_data.append(50)
-				elif data[i]["northbound"]["status"] == "heavy":
-					temp_data.append(75)
-				temp_data.append(1)
-				temp_data.append(100)
+				temp_data.append(checkStatus(data[i]["northbound"]["status"]))
 			else:
 				temp_data = ["date",data[i]["southbound"]["time_updated"]]
-				if data[i]["southbound"]["status"] == "light":
-					temp_data.append(25)
-				elif data[i]["southbound"]["status"] == "mod":
-					temp_data.append(50)
-				elif data[i]["southbound"]["status"] == "heavy":
-					temp_data.append(75)
-				temp_data.append(1)
-				temp_data.append(100)
+				temp_data.append(checkStatus(data[i]["southbound"]["status"]))
+			
+			temp_data.append(1)
+			temp_data.append(100)
 
-	final_data.append(copy.deepcopy(temp_data))
+	return temp_data
 
 
-final_data = [["30 Minutes","Lane 1 Flow (Veh/5 Minutes)","# Lane Points,% Observed"]]
+final_data = [["30 Minutes","Lane 1 Flow (Veh/5 Minutes)","# Lane Points","% Observed"]]
 
 # ../mmda-traffic-scrapped/out
 # directory = input("Enter directory: ")
@@ -83,7 +80,7 @@ if road in road_names:
 for x in range(len(file_names)):
 	if os.stat(file_names[x]).st_size != 0: #checks if file is empty
 		data = copy.deepcopy(loadFile(file_names[x]))
-		getData(data)
+		final_data.append(copy.deepcopy(getData(data)))
 		# break;
 	
 pprint.pprint(final_data)
