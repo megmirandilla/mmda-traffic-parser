@@ -72,10 +72,10 @@ def getData(data,file):
 		if data[i]['line'] == road:
 			
 			if direction == "1":
-				temp_data = [getDate(file)+" "+ data[i]["northbound"]["time_updated"]]
+				temp_data = [getDate(file)+" "+ getTime(data[i]["northbound"]["time_updated"])]
 				temp_data.append(checkStatus(data[i]["northbound"]["status"]))
 			else:
-				temp_data = ["date",data[i]["southbound"]["time_updated"]]
+				temp_data = [getDate(file)+" "+ getTime(data[i]["southbound"]["time_updated"])]
 				temp_data.append(checkStatus(data[i]["southbound"]["status"]))
 			
 			temp_data.append(1)
@@ -90,6 +90,18 @@ def getDate(file_name):
 	day = date[7:]
 	return (day+"/"+month+"/"+year)
 	# print(year)
+
+def getTime(time):
+	print(time)
+	if time[len(time)-2:] == 'pm':
+		if time[2] == ":":
+			return (str(int(time[:2])+12)+time[2:5])
+		else:
+			return (str(int(time[0])+12)+time[1:4])
+	elif time[len(time)-2:] == 'am' and time[:2] == '12':
+		return ("00"+time[2:5])
+	else:
+		return (time[:len(time)-3])
 
 final_data = [["30 Minutes","Lane 1 Flow (Veh/5 Minutes)","# Lane Points","% Observed"]]
 
