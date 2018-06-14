@@ -3,21 +3,8 @@ import pprint
 import glob
 import os
 import copy
+import csv
 
-#------------------------------
-# import csv
- 
-# myData = [["first_name", "second_name", "Grade"],
-#           ['Alex', 'Brian', 'A'],
-#           ['Tom', 'Smith', 'B']]
- 
-# myFile = open('example2.csv', 'w')
-# with myFile:
-#     writer = csv.writer(myFile)
-#     writer.writerows(myData)
-     
-# print("Writing complete")
-#----------------------------
 main_roads = ["EDSA", "ESPAA", "COMMONWEALTH", "C5", "MARCOS HIGHWAY", "SLEX", "ORTIGAS", "ROXAS BLVD.", "QUEZON AVE."]
 
 def roadMenu():
@@ -26,14 +13,13 @@ def roadMenu():
 	for i in range(len(main_roads)):
 		print("["+str(i)+"] "+main_roads[i])
 	mr_choice = input("Choice: ")
-	# int(mr_choice)
+	
 	road_list = []
 	i=0
 	for i in range(len(road_names)):
 		if road_names[i][:len(main_roads[int(mr_choice)])] == main_roads[int(mr_choice)]:
 			road_list.append(copy.deepcopy(road_names[i]))
-	# print(road_list)
-
+	
 	i=0
 	print("\nChoose Road:")
 	for i in range(len(road_list)):
@@ -80,7 +66,7 @@ def getData(data,file):
 			
 			temp_data.append(1)
 			temp_data.append(100)
-	# getDate(file)
+	
 	return temp_data
 
 def getDate(file_name):
@@ -89,10 +75,8 @@ def getDate(file_name):
 	month = date[5:7]
 	day = date[7:]
 	return (day+"/"+month+"/"+year)
-	# print(year)
-
+	
 def getTime(time):
-	print(time)
 	if time[len(time)-2:] == 'pm':
 		if time[2] == ":":
 			return (str(int(time[:2])+12)+time[2:5])
@@ -107,7 +91,7 @@ final_data = [["30 Minutes","Lane 1 Flow (Veh/5 Minutes)","# Lane Points","% Obs
 
 # ../mmda-traffic-scrapped/out
 directory = input("Enter directory: ")
-file_names = glob.glob("../mmda-traffic-scrapped/out" + "/*.json")
+file_names = glob.glob(directory + "/*.json")
 
 road_names = getRoadNames(file_names[0])
 
@@ -120,6 +104,10 @@ for x in range(len(file_names)):
 	if os.stat(file_names[x]).st_size != 0: #checks if file is empty
 		data = copy.deepcopy(loadFile(file_names[x]))
 		final_data.append(copy.deepcopy(getData(data,file_names[x])))
-		# break;
-	
-pprint.pprint(final_data)
+		
+csv_filename = road.replace(" ","_").lower()
+myFile = open(csv_filename+'.csv', 'w', newline='')
+with myFile:
+    writer = csv.writer(myFile)
+    writer.writerows(final_data)
+# pprint.pprint(final_data)
