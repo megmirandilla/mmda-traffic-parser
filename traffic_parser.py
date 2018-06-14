@@ -34,6 +34,14 @@ def roadMenu():
 			road_list.append(copy.deepcopy(road_names[i]))
 	# print(road_list)
 
+	i=0
+	print("\nChoose Road:")
+	for i in range(len(road_list)):
+		print("["+str(i)+"] "+road_list[i])
+	r_choice = input("Choice: ")
+
+	return road_list[int(r_choice)]
+
 def getRoadNames(file):
 	with open(file) as j:
 		data = json.load(j)
@@ -84,14 +92,14 @@ file_names = glob.glob("../mmda-traffic-scrapped/out" + "/*.json")
 
 road_names = getRoadNames(file_names[0])
 # print(road_names)
-roadMenu()
+# roadMenu()
 print("\nDirection:\n[1] Northbound\n[2] Southbound")
 direction = input("choice: ")
 
-road = input("Enter Road Name: ")
+road = roadMenu()
 
-if road in road_names:
-	print("yes")
+# if road in road_names:
+	# print("yes")
 
 for x in range(len(file_names)):
 	if os.stat(file_names[x]).st_size != 0: #checks if file is empty
