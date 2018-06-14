@@ -65,14 +65,14 @@ def checkStatus(status):
 	elif status == "heavy":
 		return 75
 
-def getData(data):
+def getData(data,file):
 	temp_data = []
 	i = 0
 	for i in range(len(data)):
 		if data[i]['line'] == road:
 			
 			if direction == "1":
-				temp_data = ["date",data[i]["northbound"]["time_updated"]]
+				temp_data = [getDate(file)+" "+ data[i]["northbound"]["time_updated"]]
 				temp_data.append(checkStatus(data[i]["northbound"]["status"]))
 			else:
 				temp_data = ["date",data[i]["southbound"]["time_updated"]]
@@ -80,31 +80,34 @@ def getData(data):
 			
 			temp_data.append(1)
 			temp_data.append(100)
-
+	# getDate(file)
 	return temp_data
 
+def getDate(file_name):
+	date = file_name[len(directory)+15:len(directory)+15+9]
+	year = date[1:5]
+	month = date[5:7]
+	day = date[7:]
+	return (day+"/"+month+"/"+year)
+	# print(year)
 
 final_data = [["30 Minutes","Lane 1 Flow (Veh/5 Minutes)","# Lane Points","% Observed"]]
 
 # ../mmda-traffic-scrapped/out
-# directory = input("Enter directory: ")
+directory = input("Enter directory: ")
 file_names = glob.glob("../mmda-traffic-scrapped/out" + "/*.json")
 
 road_names = getRoadNames(file_names[0])
-# print(road_names)
-# roadMenu()
+
 print("\nDirection:\n[1] Northbound\n[2] Southbound")
 direction = input("choice: ")
 
 road = roadMenu()
 
-# if road in road_names:
-	# print("yes")
-
 for x in range(len(file_names)):
 	if os.stat(file_names[x]).st_size != 0: #checks if file is empty
 		data = copy.deepcopy(loadFile(file_names[x]))
-		final_data.append(copy.deepcopy(getData(data)))
+		final_data.append(copy.deepcopy(getData(data,file_names[x])))
 		# break;
 	
 pprint.pprint(final_data)
