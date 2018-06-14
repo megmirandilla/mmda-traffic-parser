@@ -3,6 +3,7 @@ import pprint
 import glob
 import os
 import copy
+
 #------------------------------
 # import csv
  
@@ -17,6 +18,21 @@ import copy
      
 # print("Writing complete")
 #----------------------------
+main_roads = ["EDSA", "ESPAA", "COMMONWEALTH", "C5", "MARCOS HIGHWAY", "SLEX", "ORTIGAS", "ROXAS BLVD.", "QUEZON AVE."]
+
+def roadMenu():
+	i=0
+	print("\nChoose Main Road:\n")
+	for i in range(len(main_roads)):
+		print("["+str(i)+"] "+main_roads[i])
+	mr_choice = input("Choice: ")
+	# int(mr_choice)
+	road_list = []
+	i=0
+	for i in range(len(road_names)):
+		if road_names[i][:len(main_roads[int(mr_choice)])] == main_roads[int(mr_choice)]:
+			road_list.append(copy.deepcopy(road_names[i]))
+	# print(road_list)
 
 def getRoadNames(file):
 	with open(file) as j:
@@ -68,7 +84,7 @@ file_names = glob.glob("../mmda-traffic-scrapped/out" + "/*.json")
 
 road_names = getRoadNames(file_names[0])
 # print(road_names)
-
+roadMenu()
 print("\nDirection:\n[1] Northbound\n[2] Southbound")
 direction = input("choice: ")
 
