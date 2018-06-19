@@ -87,7 +87,12 @@ def getTime(time):
 	else:
 		return (time[:len(time)-3])
 
-final_data = [["30 Minutes","Lane 1 Flow (Veh/5 Minutes)","# Lane Points","% Observed"]]
+
+#main()
+
+final_data = [["30 Minutes","Lane 1 Flow (Veh/30 Minutes)","# Lane Points","% Observed"]]
+test_data = []
+train_data = []
 
 # ../mmda-traffic-scrapped/out
 directory = input("Enter directory: ")
@@ -104,10 +109,26 @@ for x in range(len(file_names)):
 	if os.stat(file_names[x]).st_size != 0: #checks if file is empty
 		data = copy.deepcopy(loadFile(file_names[x]))
 		final_data.append(copy.deepcopy(getData(data,file_names[x])))
+
+train_size = (len(final_data)-1) * 0.8
+test_size = (len(final_data)-1) - int(train_size)
+
+print(str(len(final_data))+"\n"+str(train_size)+"\n"+str(test_size))
+
+i = 1
+for i in range(int(train_size)+1):
+	train_data.append(copy.deepcopy(final_data[i]))
+i = int(train_size)+1
+for i in range(test_size+1):
+	test_data.append(copy.deepcopy(final_data[i]))
 		
 csv_filename = road.replace(" ","_").lower()
-myFile = open(csv_filename+'.csv', 'w', newline='')
+myFile = open('train.csv', 'w', newline='')
 with myFile:
     writer = csv.writer(myFile)
-    writer.writerows(final_data)
+    writer.writerows(train_data)
+myFile = open('test.csv', 'w', newline='')
+with myFile:
+    writer = csv.writer(myFile)
+    writer.writerows(test_data)
 # pprint.pprint(final_data)
